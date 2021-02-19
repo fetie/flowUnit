@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>流量转化</title>
+</head>
+<body>
+
+<div>
+  <select class="unit" onchange="selectUnit(this)">
+    <option value="1" selected>B</option>
+    <option value="3">M</option>
+    <option value="4">G</option>
+  </select>
+</div>
+
+<div>
+  <input type="text" class="flow">
+</div>
+
+<div class="value"></div>
+
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<script>
+    $('.flow').bind('input propertychange', function () {
+        selectUnit()
+    });
+
+    //单位改变后重新计算
+    function selectUnit() {
+        var flow = $('.flow').val()
+        var unit = $('.unit').val()
+
+        $('.value').text(calcFlowUnit(parseFloat(flow), parseInt(unit)))
+    }
+
+    /**
+     * 将流量转化为byte、MB、GB
+     * @param {Number} originFlow 流量，需传入字节
+     * @param {Number} unit 1 byte 3 MB 4 GB
+     * @return {String} 转换后的流量
+     */
+    function calcFlowUnit(originFlow, unit) {
+
+        //计算默认使用字节
+        var normUnit = unit - 1
+        var finalFlow
+        if (normUnit === 0) {
+            finalFlow = originFlow;
+        } else {
+            finalFlow = originFlow / (Math.pow(1024, Math.abs(normUnit)))
+        }
+
+        return parseFloat(finalFlow).toFixed(2);
+    }
+</script>
+</body>
+</html>
